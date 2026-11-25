@@ -1,0 +1,22 @@
+# Segredos: só o .env.example é versionado
+.env
+.env.*
+!.env.example
+
+# Dependências
+node_modules/
+
+# Firebase (cache e logs locais)
+.firebase/
+*-debug.log
+
+# Logs
+*.log
+
+# Sistema e editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# public/db-lab/results/ NÃO é ignorado: as medições são publicadas com o site.
