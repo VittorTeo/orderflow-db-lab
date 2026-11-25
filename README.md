@@ -4,7 +4,7 @@ Cloud-ready custom order &amp; inventory engine with an embedded database perfor
 
 Motor cloud de gestão de pedidos sob encomenda e estoque com laboratório de performance de banco de dados (índices, paginação por cursor e concorrência).
 
-> **Status:** em construção. Fase 1 (banco, Docker Compose e seed) escrita.
+> **Status:** em construção. Fase 2 (API) escrita.
 
 ## O que o projeto resolve
 
@@ -53,6 +53,38 @@ docker compose exec db psql -U orderflow -d orderflow -v ON_ERROR_STOP=1 -c "SET
 
 Os scripts de `db/init/` só rodam com o volume vazio. Para recriar o banco do zero, `docker compose down -v` **apaga todos os dados**.
 
+### API
+
+Com o `.env` criado:
+
+```sh
+docker compose up -d --build --wait
+curl http://localhost:3000/health/ready
+```
+
+Testes (Node 22.9+, contra o banco do `.env`, em um schema temporário que é apagado ao final):
+
+```sh
+cd backend
+npm ci
+npm test
+```
+
+| Método e rota | Função |
+| --- | --- |
+| `GET /health/live`, `GET /health/ready` | Processo no ar; banco acessível |
+| `GET /api/pedidos?etapa=fila&limite=20` | Lista por etapa; `cursor` opcional |
+| `GET /api/pedidos/:id` | Pedido com itens |
+| `POST /api/pedidos` | Cria |
+| `PATCH /api/pedidos/:id` | Edita (itens só na fila) |
+| `DELETE /api/pedidos/:id` | Exclui (só na fila) |
+| `PATCH /api/pedidos/:id/etapa` | Avança; em `preparo`, baixa os insumos |
+| `GET /api/insumos`, `POST /api/insumos` | Lista e cria insumos |
+| `POST /api/insumos/:id/entradas` | Entrada de estoque |
+| `GET /api/insumos/:id/movimentacoes` | Extrato, com cursor |
+
+A API não tem autenticação; por isso o Compose só a publica em `127.0.0.1`.
+
 ### Site estático
 
 Requer `firebase-tools`:
@@ -61,7 +93,7 @@ Requer `firebase-tools`:
 firebase emulators:start --only hosting --project demo-orderflow
 ```
 
-Abra <http://localhost:5000>. A API será documentada na Fase 2.
+Abra <http://localhost:5000>.
 
 ## Laboratório de performance
 
@@ -75,7 +107,7 @@ A documentar na Fase 5.
 
 - [x] Fase 0: estrutura e configuração
 - [x] Fase 1: banco, Docker Compose e seed
-- [ ] Fase 2: API
+- [x] Fase 2: API
 - [ ] Fase 3: frontend
 - [ ] Fase 4: laboratório
 - [ ] Fase 5: README final
