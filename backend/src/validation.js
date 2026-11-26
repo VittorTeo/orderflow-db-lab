@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import { AppError } from './errors.js';
 
+// Mensagens de validação em português, exibidas pelo frontend.
+z.config(z.locales.pt());
+
 export const ETAPAS = ['fila', 'preparo', 'acabamento', 'entrega'];
 const UNIDADES = ['un', 'kg', 'g', 'l', 'ml', 'm'];
 

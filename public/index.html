@@ -3,14 +3,56 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OrderFlow DB Lab</title>
+    <meta name="description" content="Pedidos sob encomenda por etapa de produção.">
+    <title>Pedidos · OrderFlow</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script type="module" src="/js/pedidos.js"></script>
   </head>
   <body>
+    <header class="topo">
+      <a class="marca" href="/">OrderFlow</a>
+      <nav aria-label="Principal">
+        <a href="/" aria-current="page">Pedidos</a>
+        <a href="/estoque.html">Estoque</a>
+      </nav>
+    </header>
+    <div id="modo" class="modo" hidden></div>
+
     <main>
-      <h1>OrderFlow DB Lab</h1>
-      <p>Controle de produção sob encomenda e gestão de insumos.</p>
-      <p>Projeto em construção.</p>
+      <div class="barra">
+        <h1>Pedidos por etapa</h1>
+        <button id="novo-pedido" class="btn primario" type="button" disabled>Novo pedido</button>
+      </div>
+      <p class="suave">Fila → Preparo → Acabamento → Entrega. Ao iniciar o preparo, os insumos são validados e baixados do estoque.</p>
+      <div id="quadro" class="quadro" aria-busy="true"></div>
     </main>
+
+    <dialog id="dlg-pedido" aria-labelledby="dlg-pedido-titulo">
+      <form id="form-pedido">
+        <h2 id="dlg-pedido-titulo">Novo pedido</h2>
+        <label>Cliente
+          <input name="cliente" required maxlength="120" autocomplete="off">
+        </label>
+        <label>Descrição
+          <textarea name="descricao" required maxlength="500" rows="3"></textarea>
+        </label>
+        <label>Prazo <span class="suave">(opcional)</span>
+          <input name="prazo" type="date">
+        </label>
+        <fieldset id="itens-campos">
+          <legend>Insumos necessários</legend>
+          <p id="itens-nota" class="nota" hidden>Os insumos já foram baixados do estoque e não podem mais mudar.</p>
+          <div id="itens-linhas"></div>
+          <button id="add-item" class="btn" type="button">Adicionar insumo</button>
+        </fieldset>
+        <p id="pedido-erro" class="erro-form" role="alert" hidden></p>
+        <div class="acoes">
+          <button class="btn" type="button" data-fechar>Cancelar</button>
+          <button class="btn primario" type="submit">Salvar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="avisos" class="avisos"></div>
   </body>
 </html>

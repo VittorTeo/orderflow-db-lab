@@ -4,7 +4,7 @@ Cloud-ready custom order &amp; inventory engine with an embedded database perfor
 
 Motor cloud de gestão de pedidos sob encomenda e estoque com laboratório de performance de banco de dados (índices, paginação por cursor e concorrência).
 
-> **Status:** em construção. Fase 2 (API) escrita.
+> **Status:** em construção. Fase 3 (frontend) escrita.
 
 ## O que o projeto resolve
 
@@ -93,7 +93,14 @@ Requer `firebase-tools`:
 firebase emulators:start --only hosting --project demo-orderflow
 ```
 
-Abra <http://localhost:5000>.
+Abra <http://localhost:5000>: **Pedidos** (quadro por etapa) e **Estoque** (saldos, entradas e extrato).
+
+O frontend escolhe o modo ao carregar a página, consultando `/health/ready` da URL definida em [public/config.js](public/config.js):
+
+- **API:** a API respondeu e o banco está acessível. Os dados vêm do PostgreSQL.
+- **Demonstração:** a API não respondeu (ou não há URL configurada). As mesmas regras rodam no navegador com dados de exemplo salvos no `localStorage`, e a página mostra "Modo demonstração — dados locais".
+
+Os testes em `backend/test/demo.test.js` garantem que o modo demonstração devolve os mesmos códigos de erro da API.
 
 ## Laboratório de performance
 
@@ -108,7 +115,7 @@ A documentar na Fase 5.
 - [x] Fase 0: estrutura e configuração
 - [x] Fase 1: banco, Docker Compose e seed
 - [x] Fase 2: API
-- [ ] Fase 3: frontend
+- [x] Fase 3: frontend
 - [ ] Fase 4: laboratório
 - [ ] Fase 5: README final
 
