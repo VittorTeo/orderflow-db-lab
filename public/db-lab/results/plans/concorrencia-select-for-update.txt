@@ -1,0 +1,12 @@
+-- Leitura do saldo com SELECT ... FOR UPDATE
+-- Gerado em 2026-11-26T13:27:14.205Z por db-lab (EXPLAIN ANALYZE, BUFFERS)
+-- Consulta: SELECT saldo FROM lab_concorrencia.estoque WHERE id = 1 FOR UPDATE
+-- Parâmetros: []
+
+LockRows  (cost=0.12..8.15 rows=1 width=11) (actual time=0.041..0.042 rows=1 loops=1)
+  Buffers: shared hit=3
+  ->  Index Scan using estoque_pkey on estoque  (cost=0.12..8.14 rows=1 width=11) (actual time=0.033..0.034 rows=1 loops=1)
+        Index Cond: (id = 1)
+        Buffers: shared hit=2
+Planning Time: 0.048 ms
+Execution Time: 0.056 ms

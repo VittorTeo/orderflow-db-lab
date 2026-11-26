@@ -1,0 +1,12 @@
+-- Cursor: mesma página, a partir da chave da linha 170000
+-- Gerado em 2026-11-26T13:26:46.282Z por db-lab (EXPLAIN ANALYZE, BUFFERS)
+-- Consulta: SELECT id, cliente, descricao, etapa, prazo, criado_em FROM pedidos WHERE etapa = $1 AND (criado_em, id) < ($3::timestamptz, $4::bigint) ORDER BY criado_em DESC, id DESC LIMIT $2
+-- Parâmetros: ["entrega",20,"2024-02-10 06:12:00+00","10001"]
+
+Limit  (cost=0.42..14.75 rows=20 width=67) (actual time=0.028..0.034 rows=20 loops=1)
+  Buffers: shared hit=4
+  ->  Index Scan using idx_pedidos_etapa_criado_id on pedidos  (cost=0.42..6373.32 rows=8894 width=67) (actual time=0.026..0.031 rows=20 loops=1)
+        Index Cond: ((etapa = 'entrega'::text) AND (ROW(criado_em, id) < ROW('2024-02-10 06:12:00+00'::timestamp with time zone, '10001'::bigint)))
+        Buffers: shared hit=4
+Planning Time: 0.134 ms
+Execution Time: 0.056 ms

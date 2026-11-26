@@ -1,0 +1,269 @@
+{
+  "experimento": "paginacao",
+  "titulo": "Paginação: OFFSET vs. cursor",
+  "gerado_em": "2026-11-26T13:26:46.283Z",
+  "parametros": {
+    "etapa": "entrega",
+    "limite": 20,
+    "linhas_na_etapa": 180000,
+    "profundidades": [
+      0,
+      1000,
+      10000,
+      50000,
+      100000,
+      170000
+    ],
+    "aquecimento": 5,
+    "repeticoes": 30
+  },
+  "metodo": "Para cada profundidade, a mesma página de 20 pedidos é buscada com OFFSET e com cursor (criado_em, id). As duas consultas são conferidas antes de medir. Tempo medido no cliente (ida e volta), após aquecimento; execucao_ms e blocos_lidos vêm do EXPLAIN (ANALYZE, BUFFERS) no servidor.",
+  "ambiente": {
+    "descricao": "PostgreSQL em contêiner Docker Desktop, no mesmo computador que executa os scripts",
+    "postgresql": "17.12 (Debian 17.12-1.pgdg12+1)",
+    "configuracoes": {
+      "effective_cache_size": "524288 8kB",
+      "jit": "on",
+      "max_connections": "100",
+      "max_parallel_workers_per_gather": "2",
+      "random_page_cost": "4",
+      "shared_buffers": "16384 8kB",
+      "work_mem": "4096 kB"
+    },
+    "linhas": {
+      "pedidos": 200000,
+      "itens_pedido": 600000,
+      "insumos": 200,
+      "movimentacoes_estoque": 570200
+    },
+    "cliente": {
+      "node": "v26.13.1",
+      "sistema": "Windows_NT 10.0.26200 (x64)",
+      "cpu": "Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz",
+      "nucleos_logicos": 12,
+      "memoria_gb": 16
+    }
+  },
+  "resultados": [
+    {
+      "profundidade": 0,
+      "offset": {
+        "amostras": 30,
+        "min_ms": 0.811,
+        "mediana_ms": 1.282,
+        "p95_ms": 1.967,
+        "max_ms": 2.234,
+        "servidor": {
+          "execucao_ms": 0.029,
+          "planejamento_ms": 0.051,
+          "blocos_lidos": 4,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      },
+      "cursor": {
+        "amostras": 30,
+        "min_ms": 0.811,
+        "mediana_ms": 1.063,
+        "p95_ms": 1.59,
+        "max_ms": 1.624,
+        "servidor": {
+          "execucao_ms": 0.023,
+          "planejamento_ms": 0.034,
+          "blocos_lidos": 4,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      }
+    },
+    {
+      "profundidade": 1000,
+      "offset": {
+        "amostras": 30,
+        "min_ms": 0.892,
+        "mediana_ms": 1.43,
+        "p95_ms": 1.972,
+        "max_ms": 2.433,
+        "servidor": {
+          "execucao_ms": 0.211,
+          "planejamento_ms": 0.033,
+          "blocos_lidos": 26,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      },
+      "cursor": {
+        "amostras": 30,
+        "min_ms": 0.89,
+        "mediana_ms": 1.224,
+        "p95_ms": 1.563,
+        "max_ms": 1.722,
+        "servidor": {
+          "execucao_ms": 0.048,
+          "planejamento_ms": 0.072,
+          "blocos_lidos": 4,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      }
+    },
+    {
+      "profundidade": 10000,
+      "offset": {
+        "amostras": 30,
+        "min_ms": 2.48,
+        "mediana_ms": 2.948,
+        "p95_ms": 3.801,
+        "max_ms": 4.13,
+        "servidor": {
+          "execucao_ms": 1.957,
+          "planejamento_ms": 0.057,
+          "blocos_lidos": 225,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      },
+      "cursor": {
+        "amostras": 30,
+        "min_ms": 0.821,
+        "mediana_ms": 1.032,
+        "p95_ms": 1.462,
+        "max_ms": 1.514,
+        "servidor": {
+          "execucao_ms": 0.041,
+          "planejamento_ms": 0.093,
+          "blocos_lidos": 5,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      }
+    },
+    {
+      "profundidade": 50000,
+      "offset": {
+        "amostras": 30,
+        "min_ms": 8.783,
+        "mediana_ms": 10.315,
+        "p95_ms": 12.098,
+        "max_ms": 13.017,
+        "servidor": {
+          "execucao_ms": 10.56,
+          "planejamento_ms": 0.057,
+          "blocos_lidos": 1109,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      },
+      "cursor": {
+        "amostras": 30,
+        "min_ms": 0.841,
+        "mediana_ms": 1.255,
+        "p95_ms": 2.046,
+        "max_ms": 2.048,
+        "servidor": {
+          "execucao_ms": 0.034,
+          "planejamento_ms": 0.055,
+          "blocos_lidos": 5,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      }
+    },
+    {
+      "profundidade": 100000,
+      "offset": {
+        "amostras": 30,
+        "min_ms": 16.692,
+        "mediana_ms": 18.675,
+        "p95_ms": 22.111,
+        "max_ms": 23.23,
+        "servidor": {
+          "execucao_ms": 27.833,
+          "planejamento_ms": 0.086,
+          "blocos_lidos": 2214,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      },
+      "cursor": {
+        "amostras": 30,
+        "min_ms": 0.821,
+        "mediana_ms": 1.124,
+        "p95_ms": 1.632,
+        "max_ms": 1.897,
+        "servidor": {
+          "execucao_ms": 0.035,
+          "planejamento_ms": 0.056,
+          "blocos_lidos": 4,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      }
+    },
+    {
+      "profundidade": 170000,
+      "offset": {
+        "amostras": 30,
+        "min_ms": 26.28,
+        "mediana_ms": 28.548,
+        "p95_ms": 32.489,
+        "max_ms": 46.883,
+        "servidor": {
+          "execucao_ms": 37.134,
+          "planejamento_ms": 0.064,
+          "blocos_lidos": 3761,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      },
+      "cursor": {
+        "amostras": 30,
+        "min_ms": 0.766,
+        "mediana_ms": 1.012,
+        "p95_ms": 1.353,
+        "max_ms": 1.417,
+        "servidor": {
+          "execucao_ms": 0.056,
+          "planejamento_ms": 0.109,
+          "blocos_lidos": 4,
+          "nos": [
+            "Limit",
+            "Index Scan (idx_pedidos_etapa_criado_id)"
+          ]
+        }
+      }
+    }
+  ],
+  "planos": [
+    {
+      "titulo": "OFFSET 170000: página após 170000 linhas",
+      "arquivo": "plans/paginacao-offset-170000.txt"
+    },
+    {
+      "titulo": "Cursor: mesma página, a partir da chave da linha 170000",
+      "arquivo": "plans/paginacao-cursor-170000.txt"
+    }
+  ]
+}

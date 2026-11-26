@@ -1,0 +1,12 @@
+-- Índice composto (etapa, criado_em, id): Entrega (maioria das linhas)
+-- Gerado em 2026-11-26T13:26:53.094Z por db-lab (EXPLAIN ANALYZE, BUFFERS)
+-- Consulta: SELECT id, cliente, descricao, etapa, prazo, criado_em FROM lab_indices.pedidos WHERE etapa = $1 ORDER BY criado_em DESC, id DESC LIMIT $2
+-- Parâmetros: ["entrega",20]
+
+Limit  (cost=0.42..1.94 rows=20 width=67) (actual time=0.023..0.027 rows=20 loops=1)
+  Buffers: shared hit=4
+  ->  Index Scan using lab_idx on pedidos  (cost=0.42..13689.02 rows=180347 width=67) (actual time=0.022..0.025 rows=20 loops=1)
+        Index Cond: (etapa = 'entrega'::text)
+        Buffers: shared hit=4
+Planning Time: 0.070 ms
+Execution Time: 0.039 ms

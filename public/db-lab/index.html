@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Medições reais de paginação, índices e concorrência no PostgreSQL.">
+    <title>Laboratório · OrderFlow</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script type="module" src="/js/dblab.js"></script>
+  </head>
+  <body>
+    <header class="topo">
+      <a class="marca" href="/">OrderFlow</a>
+      <nav aria-label="Principal">
+        <a href="/">Pedidos</a>
+        <a href="/estoque.html">Estoque</a>
+        <a href="/db-lab/" aria-current="page">Laboratório</a>
+      </nav>
+    </header>
+
+    <main class="lab">
+      <h1>Laboratório de banco de dados</h1>
+      <p class="suave">
+        Três experimentos rodados por scripts Node contra o PostgreSQL real, com 200 mil pedidos.
+        Esta página só lê os arquivos gerados pela última execução: nenhum número é digitado à mão.
+        Os tempos dependem da máquina; veja o ambiente de cada medição.
+      </p>
+
+      <section id="paginacao" class="experimento" aria-labelledby="titulo-paginacao">
+        <h2 id="titulo-paginacao">Paginação: OFFSET vs. cursor</h2>
+        <p class="pergunta">Quanto custa buscar uma página de 20 pedidos à medida que se avança na lista?</p>
+        <div class="conteudo" aria-busy="true"><p class="suave">Carregando…</p></div>
+      </section>
+
+      <section id="indices" class="experimento" aria-labelledby="titulo-indices">
+        <h2 id="titulo-indices">Índices: sem índice, simples e composto</h2>
+        <p class="pergunta">Que índice atende a consulta "primeira página de uma etapa, mais recentes primeiro"?</p>
+        <div class="conteudo" aria-busy="true"><p class="suave">Carregando…</p></div>
+      </section>
+
+      <section id="concorrencia" class="experimento" aria-labelledby="titulo-concorrencia">
+        <h2 id="titulo-concorrencia">Baixa concorrente de estoque: sem lock vs. FOR UPDATE</h2>
+        <p class="pergunta">200 pedidos simultâneos disputam 100 unidades. Quantas vendas o sistema aprova?</p>
+        <div class="conteudo" aria-busy="true"><p class="suave">Carregando…</p></div>
+      </section>
+    </main>
+  </body>
+</html>

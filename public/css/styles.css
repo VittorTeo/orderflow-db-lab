@@ -628,3 +628,262 @@ tr.abaixo td.num:first-of-type {
   line-height: 1;
   cursor: pointer;
 }
+
+/* ---------- Laboratório ---------- */
+
+/* Paleta categórica validada (claro e escuro); identidade nunca depende só da cor:
+   há legenda, rótulos diretos e tabela. */
+:root {
+  --serie-1: #257de0;
+  --serie-2: #f47230;
+  --serie-3: #00b894;
+  --grade: #e6e8ec;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --serie-1: #338ced;
+    --serie-2: #e76624;
+    --serie-3: #00a888;
+    --grade: #2a303c;
+  }
+}
+
+.lab > p {
+  max-width: 48rem;
+}
+
+.experimento {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+.experimento h2 {
+  font-size: 1.25rem;
+}
+
+.experimento h3 {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.pergunta,
+.leitura,
+.ambiente p {
+  margin: 0;
+}
+
+.ambiente {
+  font-size: 0.8125rem;
+  color: var(--suave);
+}
+
+.ambiente summary,
+.planos summary {
+  cursor: pointer;
+  color: var(--primaria);
+}
+
+.config {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.125rem 1rem;
+  margin: 0.5rem 0 0;
+}
+
+.config dt {
+  font-weight: 600;
+}
+
+.config dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.legenda li {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.chave {
+  display: inline-block;
+  flex: none;
+}
+
+.chave-barra {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--cor);
+}
+
+.chave-linha {
+  width: 14px;
+  height: 2px;
+  background: var(--cor);
+}
+
+.serie-1 { --cor: var(--serie-1); }
+.serie-2 { --cor: var(--serie-2); }
+.serie-3 { --cor: var(--serie-3); }
+
+.grafico {
+  position: relative;
+  min-width: 0;
+}
+
+.svg {
+  display: block;
+  overflow: visible;
+}
+
+.grade {
+  stroke: var(--grade);
+  stroke-width: 1;
+}
+
+.eixo {
+  stroke: var(--suave);
+  stroke-width: 1;
+}
+
+.eixo-texto,
+.valor-barra,
+.rotulo-direto,
+.rotulo-referencia {
+  fill: var(--suave);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.valor-barra,
+.rotulo-direto {
+  fill: var(--texto);
+}
+
+.eixo-titulo {
+  fill: var(--suave);
+  font-size: 12px;
+}
+
+.grupo-titulo {
+  fill: var(--texto);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.linha {
+  fill: none;
+  stroke: var(--cor);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.marcador {
+  fill: var(--cor);
+  stroke: var(--superficie);
+  stroke-width: 2;
+}
+
+.barra {
+  fill: var(--cor);
+  outline: none;
+}
+
+.barra.ativa,
+.barra:focus-visible {
+  stroke: var(--texto);
+  stroke-width: 1.5;
+}
+
+.referencia {
+  stroke: var(--texto);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.guia {
+  stroke: var(--suave);
+  stroke-width: 1;
+}
+
+.captura {
+  fill: transparent;
+}
+
+.dica {
+  position: absolute;
+  z-index: 2;
+  padding: 0.5rem 0.625rem;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  font-size: 0.8125rem;
+  pointer-events: none;
+  max-width: 20rem;
+}
+
+.dica[hidden] {
+  display: none;
+}
+
+.dica-linha {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.dica-linha span:last-child {
+  color: var(--suave);
+}
+
+.planos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.planos pre {
+  margin: 0.5rem 0 0;
+  padding: 0.75rem;
+  overflow-x: auto;
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.experimento .tabela-rolagem {
+  margin-top: 0;
+  box-shadow: none;
+}
+
+.experimento table {
+  font-size: 0.875rem;
+}

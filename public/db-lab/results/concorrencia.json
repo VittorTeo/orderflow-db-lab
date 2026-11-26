@@ -1,0 +1,230 @@
+{
+  "experimento": "concorrencia",
+  "titulo": "Baixa concorrente: sem lock vs. SELECT ... FOR UPDATE",
+  "gerado_em": "2026-11-26T13:27:14.206Z",
+  "parametros": {
+    "estoque_inicial": 100,
+    "pedidos_simultaneos": 200,
+    "conexoes": 40,
+    "rodadas": 5,
+    "atrasos_ms": [
+      0,
+      5
+    ]
+  },
+  "metodo": "Cada rodada parte de saldo 100 e dispara 200 transações simultâneas (até 40 conexões), cada uma pedindo 1 unidade: lê o saldo, aguarda o atraso (simula a aplicação), confere se há saldo e baixa. A tabela do laboratório não tem o CHECK (saldo >= 0) da tabela real, para o efeito ficar visível. Esperado sem falha: exatamente 100 vendas aprovadas e saldo final 0.",
+  "ambiente": {
+    "descricao": "PostgreSQL em contêiner Docker Desktop, no mesmo computador que executa os scripts",
+    "postgresql": "17.12 (Debian 17.12-1.pgdg12+1)",
+    "configuracoes": {
+      "effective_cache_size": "524288 8kB",
+      "jit": "on",
+      "max_connections": "100",
+      "max_parallel_workers_per_gather": "2",
+      "random_page_cost": "4",
+      "shared_buffers": "16384 8kB",
+      "work_mem": "4096 kB"
+    },
+    "linhas": {
+      "pedidos": 200000,
+      "itens_pedido": 600000,
+      "insumos": 200,
+      "movimentacoes_estoque": 570200
+    },
+    "cliente": {
+      "node": "v26.13.1",
+      "sistema": "Windows_NT 10.0.26200 (x64)",
+      "cpu": "Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz",
+      "nucleos_logicos": 12,
+      "memoria_gb": 16
+    }
+  },
+  "resultados": [
+    {
+      "cenario": "sem_lock_0ms",
+      "com_lock": false,
+      "atraso_ms": 0,
+      "rodadas": [
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 433,
+          "baixas_por_segundo": 462
+        },
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 319,
+          "baixas_por_segundo": 627
+        },
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 334.2,
+          "baixas_por_segundo": 598
+        },
+        {
+          "vendas_aprovadas": 139,
+          "vendas_alem_do_estoque": 39,
+          "saldo_final": -39,
+          "duracao_ms": 385.2,
+          "baixas_por_segundo": 519
+        },
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 354.5,
+          "baixas_por_segundo": 564
+        }
+      ],
+      "vendas_aprovadas_min": 138,
+      "vendas_aprovadas_max": 139,
+      "rodadas_com_saldo_negativo": 5
+    },
+    {
+      "cenario": "com_lock_0ms",
+      "com_lock": true,
+      "atraso_ms": 0,
+      "rodadas": [
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 371.1,
+          "baixas_por_segundo": 539
+        },
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 376,
+          "baixas_por_segundo": 532
+        },
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 372.7,
+          "baixas_por_segundo": 537
+        },
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 368.8,
+          "baixas_por_segundo": 542
+        },
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 374.9,
+          "baixas_por_segundo": 533
+        }
+      ],
+      "vendas_aprovadas_min": 100,
+      "vendas_aprovadas_max": 100,
+      "rodadas_com_saldo_negativo": 0
+    },
+    {
+      "cenario": "sem_lock_5ms",
+      "com_lock": false,
+      "atraso_ms": 5,
+      "rodadas": [
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 328.2,
+          "baixas_por_segundo": 609
+        },
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 334.8,
+          "baixas_por_segundo": 597
+        },
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 324.5,
+          "baixas_por_segundo": 616
+        },
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 309.1,
+          "baixas_por_segundo": 647
+        },
+        {
+          "vendas_aprovadas": 138,
+          "vendas_alem_do_estoque": 38,
+          "saldo_final": -38,
+          "duracao_ms": 366.9,
+          "baixas_por_segundo": 545
+        }
+      ],
+      "vendas_aprovadas_min": 138,
+      "vendas_aprovadas_max": 138,
+      "rodadas_com_saldo_negativo": 5
+    },
+    {
+      "cenario": "com_lock_5ms",
+      "com_lock": true,
+      "atraso_ms": 5,
+      "rodadas": [
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 3115.8,
+          "baixas_por_segundo": 64
+        },
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 3153.2,
+          "baixas_por_segundo": 63
+        },
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 3118.8,
+          "baixas_por_segundo": 64
+        },
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 3105.7,
+          "baixas_por_segundo": 64
+        },
+        {
+          "vendas_aprovadas": 100,
+          "vendas_alem_do_estoque": 0,
+          "saldo_final": 0,
+          "duracao_ms": 3130.2,
+          "baixas_por_segundo": 64
+        }
+      ],
+      "vendas_aprovadas_min": 100,
+      "vendas_aprovadas_max": 100,
+      "rodadas_com_saldo_negativo": 0
+    }
+  ],
+  "planos": [
+    {
+      "titulo": "Leitura do saldo com SELECT ... FOR UPDATE",
+      "arquivo": "plans/concorrencia-select-for-update.txt"
+    }
+  ]
+}

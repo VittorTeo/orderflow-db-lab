@@ -4,7 +4,7 @@ Cloud-ready custom order &amp; inventory engine with an embedded database perfor
 
 Motor cloud de gestão de pedidos sob encomenda e estoque com laboratório de performance de banco de dados (índices, paginação por cursor e concorrência).
 
-> **Status:** em construção. Fase 3 (frontend) escrita.
+> **Status:** em construção. Fase 4 (laboratório) escrita.
 
 ## O que o projeto resolve
 
@@ -104,7 +104,25 @@ Os testes em `backend/test/demo.test.js` garantem que o modo demonstração devo
 
 ## Laboratório de performance
 
-A documentar na Fase 4. Só serão publicados números medidos em execuções reais dos scripts.
+Três experimentos em `db-lab/`, rodados contra o banco do `.env` (com o seed carregado):
+
+| Script | Compara |
+| --- | --- |
+| `paginacao.js` | OFFSET vs. cursor em profundidades de 0 a 170 mil linhas |
+| `indices.js` | Sem índice vs. índice simples vs. índice composto |
+| `concorrencia.js` | Baixa simultânea de estoque sem lock vs. `SELECT ... FOR UPDATE` |
+
+```sh
+cd db-lab
+npm ci
+npm run lab
+```
+
+Os resultados vão para `public/db-lab/results/*.json` e os planos `EXPLAIN ANALYZE` para `public/db-lab/results/plans/*.txt`. A página `/db-lab/` só lê esses arquivos e mostra data, máquina e configuração de cada medição.
+
+- **Seguro para os dados:** `paginacao.js` só lê. Os outros dois criam schemas próprios (`lab_indices`, `lab_concorrencia`) e os apagam ao final.
+- **Opcional:** `LAB_AMBIENTE="descrição da máquina"` registra o ambiente no resultado; `LAB_REPETICOES` (padrão 30) e `LAB_RODADAS` (padrão 5) mudam a amostragem.
+- **Para resultados comparáveis**, feche programas pesados e não use a API durante a execução. Os números variam entre máquinas: compare as proporções, não os valores absolutos.
 
 ## Como publicar
 
@@ -116,7 +134,7 @@ A documentar na Fase 5.
 - [x] Fase 1: banco, Docker Compose e seed
 - [x] Fase 2: API
 - [x] Fase 3: frontend
-- [ ] Fase 4: laboratório
+- [x] Fase 4: laboratório
 - [ ] Fase 5: README final
 
 ## Licença

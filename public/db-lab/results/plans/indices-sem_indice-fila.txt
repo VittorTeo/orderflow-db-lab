@@ -1,0 +1,22 @@
+-- Sem índice: Fila (poucas linhas)
+-- Gerado em 2026-11-26T13:26:48.302Z por db-lab (EXPLAIN ANALYZE, BUFFERS)
+-- Consulta: SELECT id, cliente, descricao, etapa, prazo, criado_em FROM lab_indices.pedidos WHERE etapa = $1 ORDER BY criado_em DESC, id DESC LIMIT $2
+-- Parâmetros: ["fila",20]
+
+Limit  (cost=5313.04..5315.34 rows=20 width=67) (actual time=10.491..12.811 rows=20 loops=1)
+  Buffers: shared hit=2752
+  ->  Gather Merge  (cost=5313.04..5980.50 rows=5804 width=67) (actual time=10.489..12.806 rows=20 loops=1)
+        Workers Planned: 1
+        Workers Launched: 1
+        Buffers: shared hit=2752
+        ->  Sort  (cost=4313.03..4327.54 rows=5804 width=67) (actual time=8.984..8.985 rows=10 loops=2)
+              Sort Key: criado_em DESC, id DESC
+              Sort Method: top-N heapsort  Memory: 30kB
+              Buffers: shared hit=2752
+              Worker 0:  Sort Method: top-N heapsort  Memory: 30kB
+              ->  Parallel Seq Scan on pedidos  (cost=0.00..4158.59 rows=5804 width=67) (actual time=7.019..7.693 rows=5000 loops=2)
+                    Filter: (etapa = 'fila'::text)
+                    Rows Removed by Filter: 95000
+                    Buffers: shared hit=2688
+Planning Time: 0.058 ms
+Execution Time: 12.848 ms

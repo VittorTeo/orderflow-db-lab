@@ -1,0 +1,16 @@
+-- Índice simples (etapa): Fila (poucas linhas)
+-- Gerado em 2026-11-26T13:26:50.714Z por db-lab (EXPLAIN ANALYZE, BUFFERS)
+-- Consulta: SELECT id, cliente, descricao, etapa, prazo, criado_em FROM lab_indices.pedidos WHERE etapa = $1 ORDER BY criado_em DESC, id DESC LIMIT $2
+-- Parâmetros: ["fila",20]
+
+Limit  (cost=2720.15..2720.20 rows=20 width=67) (actual time=4.208..4.211 rows=20 loops=1)
+  Buffers: shared hit=144
+  ->  Sort  (cost=2720.15..2745.27 rows=10047 width=67) (actual time=4.207..4.208 rows=20 loops=1)
+        Sort Key: criado_em DESC, id DESC
+        Sort Method: top-N heapsort  Memory: 30kB
+        Buffers: shared hit=144
+        ->  Index Scan using lab_idx on pedidos  (cost=0.29..2452.81 rows=10047 width=67) (actual time=0.018..1.708 rows=10000 loops=1)
+              Index Cond: (etapa = 'fila'::text)
+              Buffers: shared hit=144
+Planning Time: 0.061 ms
+Execution Time: 4.228 ms

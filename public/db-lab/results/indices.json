@@ -1,0 +1,219 @@
+{
+  "experimento": "indices",
+  "titulo": "Índices: sem índice vs. simples vs. composto",
+  "gerado_em": "2026-11-26T13:26:53.095Z",
+  "parametros": {
+    "limite": 20,
+    "linhas_por_etapa": {
+      "acabamento": 4000,
+      "entrega": 180000,
+      "fila": 10000,
+      "preparo": 6000
+    },
+    "aquecimento": 5,
+    "repeticoes": 30
+  },
+  "metodo": "Cópia de pedidos (mesmos dados, só a PK) no schema lab_indices. Para cada variante, o índice é criado, a tabela é analisada e a consulta da primeira página por etapa é medida. Os resultados são conferidos entre variantes. Tempo medido no cliente após aquecimento; execucao_ms e blocos_lidos vêm do EXPLAIN (ANALYZE, BUFFERS).",
+  "ambiente": {
+    "descricao": "PostgreSQL em contêiner Docker Desktop, no mesmo computador que executa os scripts",
+    "postgresql": "17.12 (Debian 17.12-1.pgdg12+1)",
+    "configuracoes": {
+      "effective_cache_size": "524288 8kB",
+      "jit": "on",
+      "max_connections": "100",
+      "max_parallel_workers_per_gather": "2",
+      "random_page_cost": "4",
+      "shared_buffers": "16384 8kB",
+      "work_mem": "4096 kB"
+    },
+    "linhas": {
+      "pedidos": 200000,
+      "itens_pedido": 600000,
+      "insumos": 200,
+      "movimentacoes_estoque": 570200
+    },
+    "cliente": {
+      "node": "v26.13.1",
+      "sistema": "Windows_NT 10.0.26200 (x64)",
+      "cpu": "Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz",
+      "nucleos_logicos": 12,
+      "memoria_gb": 16
+    }
+  },
+  "resultados": [
+    {
+      "variante": "sem_indice",
+      "rotulo": "Sem índice",
+      "ddl": null,
+      "criacao_indice_ms": null,
+      "tamanho_indice_bytes": null,
+      "consultas": [
+        {
+          "etapa": "fila",
+          "rotulo": "Fila (poucas linhas)",
+          "linhas_na_etapa": 10000,
+          "amostras": 30,
+          "min_ms": 13.066,
+          "mediana_ms": 14.249,
+          "p95_ms": 19.341,
+          "max_ms": 20.105,
+          "servidor": {
+            "execucao_ms": 13.92,
+            "planejamento_ms": 0.055,
+            "blocos_lidos": 2752,
+            "nos": [
+              "Limit",
+              "Gather Merge",
+              "Sort",
+              "Seq Scan"
+            ]
+          }
+        },
+        {
+          "etapa": "entrega",
+          "rotulo": "Entrega (maioria das linhas)",
+          "linhas_na_etapa": 180000,
+          "amostras": 30,
+          "min_ms": 39.932,
+          "mediana_ms": 44.666,
+          "p95_ms": 51.978,
+          "max_ms": 53.08,
+          "servidor": {
+            "execucao_ms": 52.147,
+            "planejamento_ms": 0.057,
+            "blocos_lidos": 2752,
+            "nos": [
+              "Limit",
+              "Gather Merge",
+              "Sort",
+              "Seq Scan"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "variante": "indice_simples",
+      "rotulo": "Índice simples (etapa)",
+      "ddl": "CREATE INDEX lab_idx ON lab_indices.pedidos (etapa)",
+      "criacao_indice_ms": 101.7,
+      "tamanho_indice_bytes": 1400832,
+      "consultas": [
+        {
+          "etapa": "fila",
+          "rotulo": "Fila (poucas linhas)",
+          "linhas_na_etapa": 10000,
+          "amostras": 30,
+          "min_ms": 4.888,
+          "mediana_ms": 5.613,
+          "p95_ms": 7.209,
+          "max_ms": 7.794,
+          "servidor": {
+            "execucao_ms": 4.353,
+            "planejamento_ms": 0.092,
+            "blocos_lidos": 144,
+            "nos": [
+              "Limit",
+              "Sort",
+              "Index Scan (lab_idx)"
+            ]
+          }
+        },
+        {
+          "etapa": "entrega",
+          "rotulo": "Entrega (maioria das linhas)",
+          "linhas_na_etapa": 180000,
+          "amostras": 30,
+          "min_ms": 41.065,
+          "mediana_ms": 44.47,
+          "p95_ms": 50.341,
+          "max_ms": 50.556,
+          "servidor": {
+            "execucao_ms": 47.737,
+            "planejamento_ms": 0.091,
+            "blocos_lidos": 2752,
+            "nos": [
+              "Limit",
+              "Gather Merge",
+              "Sort",
+              "Seq Scan"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "variante": "indice_composto",
+      "rotulo": "Índice composto (etapa, criado_em, id)",
+      "ddl": "CREATE INDEX lab_idx ON lab_indices.pedidos (etapa, criado_em DESC, id DESC)",
+      "criacao_indice_ms": 234.3,
+      "tamanho_indice_bytes": 8175616,
+      "consultas": [
+        {
+          "etapa": "fila",
+          "rotulo": "Fila (poucas linhas)",
+          "linhas_na_etapa": 10000,
+          "amostras": 30,
+          "min_ms": 0.748,
+          "mediana_ms": 1.046,
+          "p95_ms": 1.357,
+          "max_ms": 1.552,
+          "servidor": {
+            "execucao_ms": 0.031,
+            "planejamento_ms": 0.051,
+            "blocos_lidos": 4,
+            "nos": [
+              "Limit",
+              "Index Scan (lab_idx)"
+            ]
+          }
+        },
+        {
+          "etapa": "entrega",
+          "rotulo": "Entrega (maioria das linhas)",
+          "linhas_na_etapa": 180000,
+          "amostras": 30,
+          "min_ms": 0.776,
+          "mediana_ms": 0.889,
+          "p95_ms": 1.365,
+          "max_ms": 1.465,
+          "servidor": {
+            "execucao_ms": 0.04,
+            "planejamento_ms": 0.06,
+            "blocos_lidos": 4,
+            "nos": [
+              "Limit",
+              "Index Scan (lab_idx)"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "planos": [
+    {
+      "titulo": "Sem índice: Fila (poucas linhas)",
+      "arquivo": "plans/indices-sem_indice-fila.txt"
+    },
+    {
+      "titulo": "Sem índice: Entrega (maioria das linhas)",
+      "arquivo": "plans/indices-sem_indice-entrega.txt"
+    },
+    {
+      "titulo": "Índice simples (etapa): Fila (poucas linhas)",
+      "arquivo": "plans/indices-indice_simples-fila.txt"
+    },
+    {
+      "titulo": "Índice simples (etapa): Entrega (maioria das linhas)",
+      "arquivo": "plans/indices-indice_simples-entrega.txt"
+    },
+    {
+      "titulo": "Índice composto (etapa, criado_em, id): Fila (poucas linhas)",
+      "arquivo": "plans/indices-indice_composto-fila.txt"
+    },
+    {
+      "titulo": "Índice composto (etapa, criado_em, id): Entrega (maioria das linhas)",
+      "arquivo": "plans/indices-indice_composto-entrega.txt"
+    }
+  ]
+}
