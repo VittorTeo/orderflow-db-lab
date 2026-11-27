@@ -4,6 +4,8 @@ Cloud-ready custom order &amp; inventory engine with an embedded database perfor
 
 Motor de gestão de pedidos sob encomenda e estoque, com um laboratório que mede no PostgreSQL real o efeito de índices, paginação por cursor e locks de concorrência.
 
+**Demo:** https://orderflow-db-lab-e6b1e.web.app (sem API publicada, abre em modo demonstração; o laboratório mostra os resultados medidos)
+
 ## O que o projeto resolve
 
 Quem produz sob encomenda precisa saber em que etapa está cada pedido e se há insumos para produzi-lo. Aqui os pedidos seguem **Fila → Preparo → Acabamento → Entrega**. Ao iniciar o Preparo, os insumos do pedido são validados e baixados do estoque numa única transação.
